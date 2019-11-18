@@ -6,6 +6,9 @@ export class Tamagotchi {
     this.playLevel = 100;
     this.restLevel = 100;
     this.healthLevel = 100;
+    this.hadMedicine = false;
+
+
   }
 
   setHunger() {
@@ -23,34 +26,50 @@ export class Tamagotchi {
   setRest() {
     setInterval(() => {
       this.restLevel -= 5;
-    }, 80000);
+    }, 60000);
+  }
+
+  upAll() {
+     
   }
 
   setHealth() {
-    if ((this.foodLevel || this.playLevel || this.restLevel) < 35) {
-      setInterval(() => {
+    setInterval(() => {
+      if ((this.foodLevel || this.playLevel || this.restLevel) < 35) {
         this.healthLevel--;
-      }, 8000);
-    } else if (((this.foodLevel && this.playLevel && this.restLevel) >= 35) && this.healthLevel < 100) {
-      setInterval(() => {
+      } else if (((this.foodLevel && this.playLevel && this.restLevel) >= 35) && this.healthLevel < 100) {
         this.healthLevel++;
-      }, 7500);
-    }
+      }
+      if (this.healthLevel === 100) {
+        this.hadMedicine = false;
+      }
+    }, 5000);
   }
   
   isDed() {
-    if (this.foodLevel > 0) {
+    if (this.healthLevel > 0) {
       return false;
     } else {
       return true;
     }
   }
 
-  feed() {
-    if (this.foodLevel > 82) {
+  feedSnack() {
+    if (this.foodLevel > 92) {
       return "Too Full!";
     } else {
-      this.foodLevel += Math.floor((Math.random() * 5) + 18);
+      this.foodLevel += Math.floor((Math.random() * 3) + 8);
+      if (this.foodLevel > 100) {
+        this.foodLevel = 100;
+      }
+    }
+  }
+
+  feedMeal() {
+    if (this.foodLevel > 72) {
+      return "Too Full!";
+    } else {
+      this.foodLevel += Math.floor((Math.random() * 3) + 25);
       if (this.foodLevel > 100) {
         this.foodLevel = 100;
       }
@@ -87,6 +106,13 @@ export class Tamagotchi {
       if (this.restLevel > 100) {
         this.restLevel = 100;
       }
+    }
+  }
+
+  giveMedicine() {
+    if (this.healthLevel <= 35 && !this.hadMedicine) {
+      this.healthLevel += 35;
+      this.hadMedicine = true;
     }
   }
 }
